@@ -75,11 +75,13 @@ public partial class App : Application
         var contextMenuStrip = new ContextMenuStrip();
         contextMenuStrip.Items.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
 
-        var appName = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>()?.Product;
+        var assembly = Assembly.GetExecutingAssembly();
+        var title = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product
+                + " " + assembly.GetName().Version;
 
         var notifyIcon = new NotifyIcon()
         {
-            Text = appName,
+            Text = title,
             Icon = App.ExtractIconFromFile(Settings.Default.VoicevoxPath, 0),
             ContextMenuStrip = contextMenuStrip,
             Visible = true,
@@ -97,7 +99,7 @@ public partial class App : Application
             {
                 MessageBox.Show(
                     $"「{Settings.Default.EngineFileRelativePath}」の起動に失敗しました。\n\n" + error,
-                    appName
+                    title
                 );
             }
             notifyIcon.Dispose();
