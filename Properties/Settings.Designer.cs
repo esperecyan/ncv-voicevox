@@ -43,5 +43,14 @@ namespace Esperecyan.NCVVoicevox.Properties {
                 this["VoicevoxPath"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("./run.exe")]
+        public string EngineFileRelativePath {
+            get {
+                return ((string)(this["EngineFileRelativePath"]));
+            }
+        }
     }
 }

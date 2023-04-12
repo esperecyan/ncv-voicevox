@@ -5,6 +5,9 @@
     <Setting Name="ReferencedFileName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">VOICEVOX.exe</Value>
     </Setting>
+    <Setting Name="EngineFileRelativePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">./run.exe</Value>
+    </Setting>
     <Setting Name="VoicevoxPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

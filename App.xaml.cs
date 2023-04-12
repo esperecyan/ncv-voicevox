@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -14,6 +15,11 @@ namespace Esperecyan.NCVVoicevox;
 /// </summary>
 public partial class App : Application
 {
+    /// <summary>
+    /// 起動失敗時に標準エラーに含まれる文字列。
+    /// </summary>
+    private static readonly string StartupErrorOutput = "Application startup failed.";
+
     [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
     private static extern int ExtractIconEx(
         string lpszFile,
@@ -58,12 +64,22 @@ public partial class App : Application
             Settings.Default.Save();
         }
 
+        var engineProcess = Process.Start(new ProcessStartInfo(
+            Path.Join(Path.GetDirectoryName(Settings.Default.VoicevoxPath), Settings.Default.EngineFileRelativePath)
+        )
+        {
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+        }) ?? throw new Exception("Process.Start() が null を返しました。");
+
         var contextMenuStrip = new ContextMenuStrip();
         contextMenuStrip.Items.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
 
+        var appName = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>()?.Product;
+
         var notifyIcon = new NotifyIcon()
         {
-            Text = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>()?.Product,
+            Text = appName,
             Icon = App.ExtractIconFromFile(Settings.Default.VoicevoxPath, 0),
             ContextMenuStrip = contextMenuStrip,
             Visible = true,
@@ -73,7 +89,29 @@ public partial class App : Application
             .GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic)
             ?.Invoke(notifyIcon, parameters: null);
 
-        this.Exit += (_, _) => notifyIcon.Dispose();
+        engineProcess.EnableRaisingEvents = true;
+        engineProcess.Exited += (sender, _) =>
+        {
+            var error = engineProcess.StandardError.ReadToEnd();
+            if (error.Contains(App.StartupErrorOutput))
+            {
+                MessageBox.Show(
+                    $"「{Settings.Default.EngineFileRelativePath}」の起動に失敗しました。\n\n" + error,
+                    appName
+                );
+            }
+            notifyIcon.Dispose();
+            Environment.Exit(0);
+        };
+
+        this.Exit += (_, _) =>
+        {
+            if (!engineProcess.HasExited)
+            {
+                engineProcess.Kill();
+            }
+            notifyIcon.Dispose();
+        };
 
     }
 }
