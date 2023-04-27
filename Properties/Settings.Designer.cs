@@ -61,5 +61,14 @@ namespace Esperecyan.NCVVoicevox.Properties {
                 this["VoicevoxPath"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50021")]
+        public int EnginePort {
+            get {
+                return ((int)(this["EnginePort"]));
+            }
+        }
     }
 }

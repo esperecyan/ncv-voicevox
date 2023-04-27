@@ -68,8 +68,8 @@ public partial class App : Application
             Settings.Default.Save();
         }
 
-        var engineServer = new EngineServer();
-        var proxyServer = new ProxyServer(Settings.Default.ProxyServerPort, engineServer.Port);
+        var engineServer = new EngineServer(Settings.Default.EnginePort);
+        var proxyServer = new ProxyServer(Settings.Default.ProxyServerPort, Settings.Default.EnginePort);
 
         proxyServer.ProxyEvent += (_, args) => Debug.WriteLine(args.Response.RequestMessage.RequestUri);
 
