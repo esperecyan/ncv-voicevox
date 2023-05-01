@@ -19,11 +19,11 @@ internal class ProxyServer
         }
     }
 
-    internal delegate void ProxyEventHandler(object sender, ProxyEventArgs e);
+    internal delegate Task<byte[]?> ProxyEventHandler(object sender, ProxyEventArgs e);
 
     private static readonly HttpClient Client;
 
-    internal event ProxyEventHandler ProxyEvent = (_, _) => { };
+    internal event ProxyEventHandler? ProxyEvent;
 
     static ProxyServer()
     {
@@ -75,7 +75,11 @@ internal class ProxyServer
                     Port = destinationPort,
                 }.Uri);
 
-                this.ProxyEvent(this, new ProxyEventArgs(responseMessage));
+                byte[]? responseEntity = null;
+                if (this.ProxyEvent != null)
+                {
+                    responseEntity = await this.ProxyEvent(this, new ProxyEventArgs(responseMessage));
+                }
 
                 context.Response.StatusCode = (int)responseMessage.StatusCode;
                 var headers = responseMessage.Headers;
@@ -86,7 +90,11 @@ internal class ProxyServer
                         context.Response.AppendHeader(name, value);
                     }
                 }
-                context.Response.Close(await responseMessage.Content.ReadAsByteArrayAsync(), willBlock: true);
+
+                context.Response.Close(
+                    responseEntity ?? await responseMessage.Content.ReadAsByteArrayAsync(),
+                    willBlock: true
+                );
             }
             finally
             {

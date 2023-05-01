@@ -88,7 +88,7 @@ public partial class App : Application
         var currentDeviceName = App.GetCurrentOutputDeviceName();
 
         foreach (var item
-            in menuItems.Cast<ToolStripMenuItem>().Where(item => item.Name.StartsWith("output-device")).ToList())
+            in menuItems.Cast<ToolStripItem>().Where(item => item.Name.StartsWith("output-device")).ToList())
         {
             menuItems.Remove(item);
         }
@@ -149,12 +149,23 @@ public partial class App : Application
             if (!args.Response.IsSuccessStatusCode
                 || args.Response.RequestMessage?.RequestUri?.LocalPath != "/synthesis")
             {
-                return;
+                return null;
             }
 
+            var reader = new WaveFileReader(await args.Response.Content.ReadAsStreamAsync());
             waveOut.DeviceNumber = App.GetCurrentOutputDeviceIndex();
-            waveOut.Init(new WaveFileReader(await args.Response.Content.ReadAsStreamAsync()));
+            waveOut.Init(reader);
             waveOut.Play();
+
+            // 同じ長さの無音のWAVデータを返却
+            var stream = new MemoryStream();
+            using var writer = new WaveFileWriter(stream, reader.WaveFormat);
+            await writer.WriteAsync(new byte[reader.Length]);
+            await writer.FlushAsync();
+            stream.Seek(0, SeekOrigin.Begin);
+            var responseEntity = new byte[stream.Length];
+            await stream.ReadAsync(responseEntity);
+            return responseEntity;
         };
 
         var contextMenuStrip = new ContextMenuStrip();
