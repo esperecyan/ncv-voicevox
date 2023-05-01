@@ -32,6 +32,24 @@ namespace Esperecyan.NCVVoicevox.Properties {
             }
         }
         
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("./run.exe")]
+        public string EngineFileRelativePath {
+            get {
+                return ((string)(this["EngineFileRelativePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("49430")]
+        public int ProxyServerPort {
+            get {
+                return ((int)(this["ProxyServerPort"]));
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -41,15 +59,6 @@ namespace Esperecyan.NCVVoicevox.Properties {
             }
             set {
                 this["VoicevoxPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("./run.exe")]
-        public string EngineFileRelativePath {
-            get {
-                return ((string)(this["EngineFileRelativePath"]));
             }
         }
     }

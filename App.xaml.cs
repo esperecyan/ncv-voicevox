@@ -69,6 +69,9 @@ public partial class App : Application
         }
 
         var engineServer = new EngineServer();
+        var proxyServer = new ProxyServer(Settings.Default.ProxyServerPort, engineServer.Port);
+
+        proxyServer.ProxyEvent += (_, args) => Debug.WriteLine(args.Response.RequestMessage.RequestUri);
 
         var contextMenuStrip = new ContextMenuStrip();
         contextMenuStrip.Items.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
