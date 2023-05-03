@@ -14,6 +14,9 @@
     <Setting Name="EnginePort" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">50021</Value>
     </Setting>
+    <Setting Name="ParentProcessName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">NiconamaCommentViewer</Value>
+    </Setting>
     <Setting Name="VoicevoxPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

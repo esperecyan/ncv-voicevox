@@ -119,6 +119,14 @@ public partial class App : Application
             Settings.Default.Save();
         }
 
+        var ncvWatcher = new ProcessWatcher(Settings.Default.ParentProcessName);
+        if (ncvWatcher.IsAllExited)
+        {
+            MessageBox.Show($"「{Settings.Default.ParentProcessName}」が起動していません。", App.Title);
+            this.Shutdown();
+            return;
+        }
+
         var waveOut = new WaveOut();
 
         var engineServer = new EngineServer(Settings.Default.EnginePort);
@@ -193,6 +201,13 @@ public partial class App : Application
         {
             engineServer.Dispose();
             notifyIcon.Dispose();
+        };
+
+        ncvWatcher.AllExited += (_, _) =>
+        {
+            engineServer.Dispose();
+            notifyIcon.Dispose();
+            Environment.Exit(0);
         };
     }
 }
