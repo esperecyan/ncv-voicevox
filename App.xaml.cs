@@ -16,6 +16,7 @@ namespace Esperecyan.NCVVoicevox;
 public partial class App : Application
 {
     internal static readonly string Title;
+    private static readonly int PossibleVolumeValueCount = 100;
 
     static App()
     {
@@ -147,10 +148,27 @@ public partial class App : Application
             return responseEntity;
         };
 
-        var contextMenuStrip = new ContextMenuStrip();
-        contextMenuStrip.Items.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
+        var contextMenuStrip = new ContextMenuStrip()
+        {
+            Renderer = new VolumeIconRenderer(),
+        };
+        var menuItems = contextMenuStrip.Items;
+        var volumeBar = new TrackBar()
+        {
+            Maximum = App.PossibleVolumeValueCount,
+            Width = 200,
+            TickFrequency = 10,
+            Value = (int)((waveOut.Volume = Settings.Default.Volume) * App.PossibleVolumeValueCount),
+        };
+        volumeBar.ValueChanged += (_, _) =>
+        {
+            Settings.Default.Volume = waveOut.Volume = (float)volumeBar.Value / App.PossibleVolumeValueCount;
+            Settings.Default.Save();
+        };
+        menuItems.Add(new ToolStripControlHost(volumeBar, "volume"));
+        menuItems.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
 
-        contextMenuStrip.Opening += (_, _) => App.UpdateDeviceMenuItems(contextMenuStrip.Items);
+        contextMenuStrip.Opening += (_, _) => App.UpdateDeviceMenuItems(menuItems);
 
         var notifyIcon = new NotifyIcon()
         {
