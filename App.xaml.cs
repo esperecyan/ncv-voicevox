@@ -83,6 +83,7 @@ public partial class App : Application
             ContextMenuStrip = contextMenuStrip,
             Visible = true,
         };
+        AppDomain.CurrentDomain.UnhandledException += (_, _) => notifyIcon.Dispose();
 
         notifyIcon.Click += (_, _) => typeof(NotifyIcon)
             .GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic)

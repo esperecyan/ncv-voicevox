@@ -37,6 +37,8 @@ internal class EngineServer : IDisposable
 
         this.process.EnableRaisingEvents = true;
         this.process.Exited += this.EngineProcess_Exited;
+
+        AppDomain.CurrentDomain.UnhandledException += (_, _) => this.Dispose();
     }
 
     public void Dispose()
