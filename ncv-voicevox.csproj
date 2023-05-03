@@ -6,6 +6,10 @@
     <RootNamespace>Esperecyan.NCVVoicevox</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <Copyright>© 2023 100の人</Copyright>
+    <AssemblyTitle>NCV　VOICEVOXプロクシ</AssemblyTitle>
+    <Product>$(AssemblyTitle)</Product>
+    <Company>Esperecyan</Company>
   </PropertyGroup>
 
 </Project>
