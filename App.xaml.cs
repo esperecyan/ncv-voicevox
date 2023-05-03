@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Application = System.Windows.Application;
 using System.Windows.Forms;
 using NAudio.Wave;
@@ -19,30 +17,11 @@ public partial class App : Application
 {
     internal static readonly string Title;
 
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-    private static extern int ExtractIconEx(
-        string lpszFile,
-        int nIconIndex,
-        out IntPtr phiconLarge,
-        out IntPtr phiconSmall,
-        int nIcons
-    );
-
     static App()
     {
         var assembly = Assembly.GetExecutingAssembly();
         App.Title = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product
                 + " " + assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-    }
-
-    private static Icon ExtractIconFromFile(string path, int index)
-    {
-        App.ExtractIconEx(path, index, out var phiconLarge, out var phiconSmall, nIcons: 1);
-        Icon.FromHandle(phiconSmall).Dispose();
-        var icon = Icon.FromHandle(phiconLarge);
-        icon.Dispose();
-
-        return icon;
     }
 
     /// <summary>
@@ -176,7 +155,7 @@ public partial class App : Application
         var notifyIcon = new NotifyIcon()
         {
             Text = App.Title,
-            Icon = App.ExtractIconFromFile(Settings.Default.VoicevoxPath, 0),
+            Icon = IconExtractor.ExtractFromFile(Settings.Default.VoicevoxPath, 0),
             ContextMenuStrip = contextMenuStrip,
             Visible = true,
         };
