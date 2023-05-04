@@ -30,7 +30,7 @@ public partial class App : Application
     {
         var assembly = Assembly.GetExecutingAssembly();
         App.Title = assembly.GetCustomAttribute<AssemblyProductAttribute>()?.Product
-                + " " + assembly.GetName().Version;
+                + " " + assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
     }
 
     private static Icon ExtractIconFromFile(string path, int index)
