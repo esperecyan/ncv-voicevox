@@ -50,6 +50,15 @@ namespace Esperecyan.NCVVoicevox.Properties {
             }
         }
         
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50021")]
+        public int EnginePort {
+            get {
+                return ((int)(this["EnginePort"]));
+            }
+        }
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -62,12 +71,15 @@ namespace Esperecyan.NCVVoicevox.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50021")]
-        public int EnginePort {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OuputDeviceName {
             get {
-                return ((int)(this["EnginePort"]));
+                return ((string)(this["OuputDeviceName"]));
+            }
+            set {
+                this["OuputDeviceName"] = value;
             }
         }
     }
