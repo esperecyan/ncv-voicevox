@@ -14,10 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NAudio.WinForms" Version="2.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -26,9 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="NAudio - license.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
