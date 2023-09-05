@@ -56,12 +56,8 @@ public partial class App : Application
 
         var engineServer = new EngineServer(Settings.Default.EnginePort);
 
-        var contextMenuStrip = new ContextMenuStrip()
-        {
-            Renderer = new VolumeIconRenderer(),
-        };
-        var menuItems = contextMenuStrip.Items;
-        menuItems.Add(new ToolStripMenuItem("終了", image: null, (sender, e) => this.Shutdown()));
+        var contextMenuStrip = new ContextMenuStrip();
+        contextMenuStrip.Items.Add("終了", image: null, (sender, e) => this.Shutdown());
 
         var notifyIcon = new NotifyIcon()
         {
